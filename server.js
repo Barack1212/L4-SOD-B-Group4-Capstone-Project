@@ -1,14 +1,10 @@
-const http = require("http");
+const express = require('express')
+const app = express()
 
-const server = http.createServer((request, response) => {
-    response.write("<html>");
-    response.write("<head><title>My Server</title></head>");
-    response.write("<body><input type=\"text\" placeholder=\"Enter your name\"></body>");
-    response.write("</html>");
-    response.end();
+app.get('/', (req, res) => {
+    res.send("connected successfully")
 })
 
-server.listen(3000, () => {
-    console.log("server have reached my server at 3000")
+app.listen(3000, () => {
+    console.log("server on http://localhost:3000")
 })
-
