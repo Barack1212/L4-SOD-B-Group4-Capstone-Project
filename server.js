@@ -2,6 +2,10 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const cors = require('cors')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+const JWT_SECRET = process.env.JWT_SECRET || 'change-me'
 
 app.use(cors())
 app.use(express.json())
@@ -14,9 +18,12 @@ mongoose.connect('mongodb://localhost:27017/testdb').then(() => {
 
 const userProfileSchema = new mongoose.Schema({
     uid: { type: String, required: true, unique: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    passwordHash: String,
     displayName: String,
-    role: { type: String, enum: ['owner', 'manager', 'worker'], required: true },
+    fullName: String,
+    district: String,
+    role: { type: String, enum: ['admin', 'farmer', 'owner', 'manager', 'worker'], required: true },
     farmId: String,
     createdAt: { type: String, required: true }
 })
@@ -76,8 +83,184 @@ const InventoryItem = mongoose.model('InventoryItem', inventoryItemSchema)
 const Synergy = mongoose.model('Synergy', synergySchema)
 const FarmTask = mongoose.model('FarmTask', farmTaskSchema)
 
+const savedRecommendationSchema = new mongoose.Schema({
+    id: { type: String, required: true, unique: true },
+    userId: { type: String, required: true },
+    crop: { type: String, required: true },
+    district: { type: String, required: true },
+    season: { type: String, required: true },
+    advice: { type: String, required: true },
+    createdAt: { type: String, required: true }
+})
+
+const SavedRecommendation = mongoose.model('SavedRecommendation', savedRecommendationSchema)
+
+function createToken(user) {
+    return jwt.sign(
+        {
+            uid: user.uid,
+            email: user.email,
+            role: user.role,
+        },
+        JWT_SECRET,
+        { expiresIn: '7d' },
+    )
+}
+
+function authMiddleware(req, res, next) {
+    const authHeader = req.headers.authorization
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Unauthorized' })
+    }
+    const token = authHeader.replace('Bearer ', '')
+    try {
+        const payload = jwt.verify(token, JWT_SECRET)
+        req.user = payload
+        next()
+    } catch (err) {
+        return res.status(401).json({ error: 'Invalid or expired token' })
+    }
+}
+
 app.get('/api/test', (req, res) => {
     res.json({ message: 'API is working!' })
+})
+
+app.post('/api/auth/signup', async (req, res) => {
+    try {
+        const { fullName, email, password, district } = req.body
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required.' })
+        }
+        const existing = await UserProfile.findOne({ email })
+        if (existing) {
+            return res.status(400).json({ error: 'A user with that email already exists.' })
+        }
+        const passwordHash = await bcrypt.hash(password, 10)
+        const uid = new mongoose.Types.ObjectId().toString()
+        const now = new Date().toISOString()
+        const user = new UserProfile({
+            uid,
+            email,
+            passwordHash,
+            displayName: fullName,
+            fullName,
+            district,
+            role: 'farmer',
+            createdAt: now,
+        })
+        await user.save()
+        res.json({ message: 'Account created successfully.' })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { email, password } = req.body
+        const user = await UserProfile.findOne({ email })
+        if (!user || !user.passwordHash) {
+            return res.status(401).json({ error: 'Invalid email or password.' })
+        }
+        const valid = await bcrypt.compare(password, user.passwordHash)
+        if (!valid) {
+            return res.status(401).json({ error: 'Invalid email or password.' })
+        }
+        const token = createToken(user)
+        res.json({
+            token,
+            user: {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                fullName: user.fullName,
+                district: user.district,
+                role: user.role,
+            },
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+app.get('/api/auth/me', authMiddleware, async (req, res) => {
+    try {
+        const user = await UserProfile.findOne({ uid: req.user.uid })
+        if (!user) return res.status(404).json({ error: 'User not found.' })
+        res.json({
+            user: {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                fullName: user.fullName,
+                district: user.district,
+                role: user.role,
+            },
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+app.get('/api/recommendations', authMiddleware, async (req, res) => {
+    try {
+        const query = req.user.role === 'admin' ? {} : { userId: req.user.uid }
+        const recs = await SavedRecommendation.find(query).sort({ createdAt: -1 })
+        res.json(recs)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+app.post('/api/recommendations', authMiddleware, async (req, res) => {
+    try {
+        const { crop, district, season, advice } = req.body
+        const id = new mongoose.Types.ObjectId().toString()
+        const now = new Date().toISOString()
+        const rec = new SavedRecommendation({
+            id,
+            userId: req.user.uid,
+            crop,
+            district,
+            season,
+            advice,
+            createdAt: now,
+        })
+        await rec.save()
+        res.json(rec)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+app.delete('/api/recommendations/:id', authMiddleware, async (req, res) => {
+    try {
+        const rec = await SavedRecommendation.findOne({ id: req.params.id })
+        if (!rec) return res.status(404).json({ error: 'Recommendation not found.' })
+        if (rec.userId !== req.user.uid && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'Forbidden' })
+        }
+        await rec.deleteOne()
+        res.json({ message: 'Recommendation deleted.' })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+app.get('/api/admin/overview', authMiddleware, async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'Forbidden' })
+        }
+        const [profiles, recommendations] = await Promise.all([
+            UserProfile.find(),
+            SavedRecommendation.find().sort({ createdAt: -1 }),
+        ])
+        res.json({ profiles, recommendations })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
 })
 
 app.get('/api/users/:uid', async (req, res) => {
