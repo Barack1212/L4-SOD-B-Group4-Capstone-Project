@@ -90,6 +90,7 @@ export interface Crop {
   bestSeasons: RwandaSeason[];
   waterNeed: "Low" | "Medium" | "High";
   notes: string;
+  image: string;
 }
 
 export const CROPS: Crop[] = [
@@ -97,6 +98,7 @@ export const CROPS: Crop[] = [
     id: "maize",
     name: "Maize",
     emoji: "🌽",
+    image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&q=80",
     season: "Season A & B",
     months: "Sep – Jan / Feb – Jun",
     bestSeasons: ["Umuhindo", "Itumba"],
@@ -106,7 +108,8 @@ export const CROPS: Crop[] = [
   {
     id: "beans",
     name: "Beans",
-    emoji: "🫘",
+    emoji: "🥜",
+    image: "/images/crops/beans.png",
     season: "Season A & B",
     months: "Sep – Dec / Mar – Jun",
     bestSeasons: ["Umuhindo", "Itumba"],
@@ -116,7 +119,8 @@ export const CROPS: Crop[] = [
   {
     id: "rice",
     name: "Rice",
-    emoji: "🌾",
+    emoji: "🍚",
+    image: "/images/crops/rice.png",
     season: "Season A",
     months: "Mar – Jul",
     bestSeasons: ["Itumba"],
@@ -127,6 +131,7 @@ export const CROPS: Crop[] = [
     id: "irish-potato",
     name: "Irish Potato",
     emoji: "🥔",
+    image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600&q=80",
     season: "Season A & B",
     months: "Sep – Dec / Feb – Jun",
     bestSeasons: ["Umuhindo", "Itumba"],
@@ -136,7 +141,8 @@ export const CROPS: Crop[] = [
   {
     id: "cassava",
     name: "Cassava",
-    emoji: "🥯",
+    emoji: "🍠",
+    image: "/images/crops/cassava.png",
     season: "Year-round",
     months: "Plant Sep – Nov",
     bestSeasons: ["Umuhindo", "Itumba"],
@@ -147,6 +153,7 @@ export const CROPS: Crop[] = [
     id: "banana",
     name: "Banana",
     emoji: "🍌",
+    image: "https://images.unsplash.com/photo-1528825871115-3581a5387919?w=600&q=80",
     season: "Year-round",
     months: "Plant in rains",
     bestSeasons: ["Itumba", "Umuhindo"],
@@ -157,6 +164,7 @@ export const CROPS: Crop[] = [
     id: "coffee",
     name: "Coffee",
     emoji: "☕",
+    image: "https://images.unsplash.com/photo-1524350876685-274059332603?w=600&q=80",
     season: "Perennial",
     months: "Harvest Mar – Jul",
     bestSeasons: ["Itumba"],
@@ -166,7 +174,8 @@ export const CROPS: Crop[] = [
   {
     id: "tea",
     name: "Tea",
-    emoji: "🍃",
+    emoji: "🍵",
+    image: "/images/crops/tea.png",
     season: "Perennial",
     months: "Year-round plucking",
     bestSeasons: ["Itumba", "Umuhindo"],
@@ -176,7 +185,8 @@ export const CROPS: Crop[] = [
   {
     id: "sorghum",
     name: "Sorghum",
-    emoji: "🌾",
+    emoji: "🌿",
+    image: "/images/crops/sorghum.png",
     season: "Season A & B",
     months: "Sep – Feb",
     bestSeasons: ["Umuhindo"],
@@ -186,7 +196,8 @@ export const CROPS: Crop[] = [
   {
     id: "soybean",
     name: "Soybean",
-    emoji: "🫛",
+    emoji: "🌱",
+    image: "/images/crops/soybean.png",
     season: "Season A & B",
     months: "Mar – Jul",
     bestSeasons: ["Itumba"],
@@ -196,7 +207,8 @@ export const CROPS: Crop[] = [
   {
     id: "wheat",
     name: "Wheat",
-    emoji: "🌾",
+    emoji: "🍞",
+    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80",
     season: "Season B",
     months: "Feb – Jul",
     bestSeasons: ["Itumba"],
@@ -207,6 +219,7 @@ export const CROPS: Crop[] = [
     id: "tomato",
     name: "Tomato",
     emoji: "🍅",
+    image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&q=80",
     season: "Season A & B",
     months: "Year-round (irrigated)",
     bestSeasons: ["Umuhindo", "Itumba", "Urugaryi"],
@@ -282,31 +295,31 @@ export const FARMING_TIPS = [
   {
     title: "Rotate crops yearly",
     body: "Alternate maize, beans and a root crop to break pest cycles and restore nitrogen.",
-    icon: "🔄",
+    icon: "rotate",
   },
   {
     title: "Mulch to keep moisture",
     body: "Cover soil with grass or banana leaves — reduces evaporation by up to 70%.",
-    icon: "🍂",
+    icon: "mulch",
   },
   {
     title: "Test your soil pH",
     body: "Most Rwandan soils are acidic. Apply agricultural lime where pH is below 5.5.",
-    icon: "🧪",
+    icon: "test",
   },
   {
     title: "Use certified seeds",
     body: "Buy from RAB-approved suppliers — yields can double compared to recycled seed.",
-    icon: "🌱",
+    icon: "seeds",
   },
   {
     title: "Plant on contour lines",
     body: "On slopes, plant across the hill to prevent erosion and capture rainwater.",
-    icon: "⛰️",
+    icon: "contour",
   },
   {
     title: "Time planting with rains",
     body: "Wait for the first 30–40mm of rain before sowing — avoids seed loss to dry spells.",
-    icon: "🌧️",
+    icon: "rain",
   },
 ];

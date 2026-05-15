@@ -35,7 +35,9 @@ function CropsPage() {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <div className="text-4xl">{c.emoji}</div>
+                  <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-muted shadow-sm">
+                    <img src={c.image} alt={c.name} className="h-full w-full object-cover" />
+                  </div>
                   <h2 className="mt-2 text-lg font-bold">{c.name}</h2>
                   <p className="text-xs font-medium text-muted-foreground">{c.season}</p>
                 </div>

@@ -3,14 +3,6 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CROPS, POPULAR_CROPS } from "@/lib/farming-data";
 
-const CROP_BG: Record<string, string> = {
-  maize: "from-yellow-400/30 to-yellow-600/30",
-  beans: "from-rose-400/30 to-rose-600/30",
-  rice: "from-lime-400/30 to-lime-700/30",
-  "irish-potato": "from-amber-300/30 to-amber-700/30",
-  cassava: "from-stone-400/30 to-stone-600/30",
-  banana: "from-yellow-300/30 to-emerald-500/30",
-};
 
 export function PopularCrops() {
   const popular = POPULAR_CROPS.map((id) => CROPS.find((c) => c.id === id)!).filter(Boolean);
@@ -38,12 +30,12 @@ export function PopularCrops() {
             className="overflow-hidden rounded-xl bg-card transition-transform hover:-translate-y-1"
             style={{ boxShadow: "var(--shadow-card)" }}
           >
-            <div
-              className={`flex h-32 items-center justify-center bg-gradient-to-br text-6xl ${
-                CROP_BG[c.id] ?? "from-primary/20 to-primary/40"
-              }`}
-            >
-              {c.emoji}
+            <div className="h-32 w-full overflow-hidden bg-muted">
+              <img
+                src={c.image}
+                alt={c.name}
+                className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
+              />
             </div>
             <div className="p-4">
               <h3 className="font-bold text-foreground">{c.name}</h3>

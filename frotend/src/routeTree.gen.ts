@@ -17,6 +17,8 @@ import { Route as SeasonsRouteImport } from './routes/seasons'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CropsRouteImport } from './routes/crops'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as AskMeRouteImport } from './routes/ask-me'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -61,6 +63,16 @@ const CropsRoute = CropsRouteImport.update({
   path: '/crops',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AskMeRoute = AskMeRouteImport.update({
+  id: '/ask-me',
+  path: '/ask-me',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -81,6 +93,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/ask-me': typeof AskMeRoute
+  '/community': typeof CommunityRoute
   '/crops': typeof CropsRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
@@ -94,6 +108,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/ask-me': typeof AskMeRoute
+  '/community': typeof CommunityRoute
   '/crops': typeof CropsRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
@@ -108,6 +124,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/ask-me': typeof AskMeRoute
+  '/community': typeof CommunityRoute
   '/crops': typeof CropsRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
@@ -123,6 +141,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/ask-me'
+    | '/community'
     | '/crops'
     | '/dashboard'
     | '/login'
@@ -136,6 +156,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/ask-me'
+    | '/community'
     | '/crops'
     | '/dashboard'
     | '/login'
@@ -149,6 +171,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/ask-me'
+    | '/community'
     | '/crops'
     | '/dashboard'
     | '/login'
@@ -163,6 +187,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
+  AskMeRoute: typeof AskMeRoute
+  CommunityRoute: typeof CommunityRoute
   CropsRoute: typeof CropsRoute
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
@@ -231,6 +257,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CropsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ask-me': {
+      id: '/ask-me'
+      path: '/ask-me'
+      fullPath: '/ask-me'
+      preLoaderRoute: typeof AskMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -259,6 +299,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
+  AskMeRoute: AskMeRoute,
+  CommunityRoute: CommunityRoute,
   CropsRoute: CropsRoute,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,

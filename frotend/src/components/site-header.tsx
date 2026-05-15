@@ -10,13 +10,15 @@ const NAV = [
   { label: "Weather", to: "/weather" },
   { label: "Tips", to: "/tips" },
   { label: "About", to: "/about" },
+  { label: "Ask Me", to: "/ask-me" },
+  { label: "Community", to: "/community" },
 ] as const;
 
 export function SiteHeader() {
   const { user, isAdmin, signOut } = useAuth();
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between gap-6 px-4">
+      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
         <Link to="/" className="flex items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary">
             <Sprout className="h-5 w-5" />
@@ -29,7 +31,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav className="hidden items-center gap-3 lg:gap-6 md:flex">
           {NAV.map((item) => (
             <Link
               key={item.to}
