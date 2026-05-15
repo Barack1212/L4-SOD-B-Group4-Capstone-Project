@@ -150,7 +150,7 @@ app.post('/api/auth/signup', async (req, res) => {
             createdAt: now,
         })
         await user.save()
-        res.json({ message: 'Account created successfully.' })
+        res.status(201).json({ message: 'Account created successfully.' })
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
