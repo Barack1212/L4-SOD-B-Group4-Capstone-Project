@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { CROPS, detectSeason } from "@/lib/farming-data";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
@@ -73,7 +74,12 @@ function DashboardPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <SiteHeader />
       
-      <main className="container mx-auto px-4 py-8 md:py-12 flex-1 max-w-6xl">
+      <motion.main 
+        className="container mx-auto px-4 py-8 md:py-12 flex-1 max-w-6xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         {/* Welcome Header */}
         <header className="rounded-3xl bg-gradient-to-r from-primary via-primary/90 to-primary/80 p-8 md:p-10 text-primary-foreground relative overflow-hidden shadow-lg">
           <div className="relative z-10">
@@ -158,8 +164,11 @@ function DashboardPage() {
                   const cropData = CROPS.find(c => c.name.toLowerCase() === r.crop.toLowerCase());
                   
                   return (
-                    <article
+                    <motion.article
                       key={r.id}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
                       className="group relative rounded-2xl border border-border/50 bg-card p-5 transition-all hover:border-primary/20 hover:shadow-md"
                     >
                       <div className="flex items-start gap-4">
@@ -178,7 +187,6 @@ function DashboardPage() {
                             <div>
                               <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
                                 {r.crop}
-                                {cropData && <span className="text-base">{cropData.emoji}</span>}
                               </h3>
                               <div className="mt-1.5 flex flex-wrap items-center gap-2">
                                 <Badge variant="secondary" className="font-medium">{r.district}</Badge>
@@ -206,7 +214,7 @@ function DashboardPage() {
                           </div>
                         </div>
                       </div>
-                    </article>
+                    </motion.article>
                   );
                 })
               ) : (
@@ -264,7 +272,7 @@ function DashboardPage() {
           </aside>
           
         </div>
-      </main>
+      </motion.main>
       <SiteFooter />
     </div>
   );

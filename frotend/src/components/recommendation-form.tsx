@@ -66,9 +66,8 @@ export function RecommendationForm() {
       );
       const suggested = recommendCropsFor(district, season.key).map((c) => c.name);
       const isBest = cropData.bestSeasons.includes(season.key);
-      const advice = `${cropData.name} is ${
-        isBest ? "well-suited" : "not the best fit"
-      } for ${season.label} in ${district}. ${cropData.notes} ${irrigation.message}`;
+      const advice = `${cropData.name} is ${isBest ? "well-suited" : "not the best fit"
+        } for ${season.label} in ${district}. ${cropData.notes} ${irrigation.message}`;
 
       return {
         crop: cropData.name,
@@ -132,7 +131,7 @@ export function RecommendationForm() {
               <SelectContent>
                 {CROPS.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
-                    {c.emoji} {c.name}
+                    {c.name}
                   </SelectItem>
                 ))}
               </SelectContent>

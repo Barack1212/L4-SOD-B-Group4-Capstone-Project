@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { Sprout, CloudSun, Bot, Users, Globe, Database, ArrowRight, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -23,7 +24,12 @@ function AboutPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <SiteHeader />
       
-      <main className="flex-1">
+      <motion.main 
+        className="flex-1"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         
         {/* 1. Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/20 py-20 md:py-28">
@@ -54,7 +60,13 @@ function AboutPage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <motion.div 
+              className="grid md:grid-cols-2 gap-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5, staggerChildren: 0.1 }}
+            >
               <FeatureCard 
                 icon={<Globe className="h-6 w-6 text-blue-500" />}
                 title="Smart Season Detection"
@@ -75,7 +87,7 @@ function AboutPage() {
                 title="Global Farmer Community"
                 desc="Join discussions with other farmers across the country. Share tips, ask questions, and learn from a network of experts."
               />
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -87,8 +99,14 @@ function AboutPage() {
               Our recommendations aren't guesses. They are modeled on official guidance and powered by world-class APIs.
             </p>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="rounded-3xl border border-border/50 bg-card p-8 md:p-10 shadow-sm flex flex-col items-center">
+            <motion.div 
+              className="grid md:grid-cols-2 gap-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="rounded-3xl border border-border/50 bg-card p-8 md:p-10 shadow-sm flex flex-col items-center transition-all hover:shadow-md hover:-translate-y-1">
                 <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
                   <ShieldCheck className="h-8 w-8 text-primary" />
                 </div>
@@ -98,7 +116,7 @@ function AboutPage() {
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-border/50 bg-card p-8 md:p-10 shadow-sm flex flex-col items-center">
+              <div className="rounded-3xl border border-border/50 bg-card p-8 md:p-10 shadow-sm flex flex-col items-center transition-all hover:shadow-md hover:-translate-y-1">
                 <div className="h-16 w-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-6">
                   <Database className="h-8 w-8 text-blue-500" />
                 </div>
@@ -107,7 +125,7 @@ function AboutPage() {
                   We integrate directly with <strong>Open-Meteo's</strong> high-resolution satellite APIs to fetch real-time temperature, precipitation, and wind data for all 30 Rwandan districts.
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -132,7 +150,7 @@ function AboutPage() {
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)", backgroundSize: "32px 32px" }}></div>
         </section>
 
-      </main>
+      </motion.main>
       
       <SiteFooter />
     </div>
@@ -141,7 +159,10 @@ function AboutPage() {
 
 function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
   return (
-    <div className="flex gap-5 p-6 rounded-2xl transition-colors hover:bg-muted/50">
+    <motion.div 
+      variants={{ initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 } }}
+      className="flex gap-5 p-6 rounded-2xl transition-colors hover:bg-muted/50"
+    >
       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-background shadow-sm border border-border/50">
         {icon}
       </div>
@@ -151,6 +172,6 @@ function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: stri
           {desc}
         </p>
       </div>
-    </div>
+    </motion.div>
   )
 }
