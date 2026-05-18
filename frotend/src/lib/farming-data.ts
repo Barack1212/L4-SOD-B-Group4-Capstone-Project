@@ -322,4 +322,24 @@ export const FARMING_TIPS = [
     body: "Wait for the first 30–40mm of rain before sowing — avoids seed loss to dry spells.",
     icon: "rain",
   },
+  {
+    title: "Control pests organically",
+    body: "Use neem or pyrethrum-based sprays to safely manage aphids and caterpillars without chemical residue.",
+    icon: "mulch",
+  },
+  {
+    title: "Intercrop smartly",
+    body: "Plant climbing beans with maize. The maize acts as a pole, while beans fix nitrogen for the maize.",
+    icon: "seeds",
+  },
+  {
+    title: "Harvest at the right time",
+    body: "Harvest crops early morning or late afternoon to prevent wilting and preserve crop quality.",
+    icon: "rotate",
+  },
+  {
+    title: "Manage weeds early",
+    body: "Weed during the first 3-4 weeks after planting. This prevents competition for essential nutrients.",
+    icon: "mulch",
+  },
 ];

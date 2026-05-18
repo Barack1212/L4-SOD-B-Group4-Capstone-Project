@@ -37,7 +37,7 @@ function HomePage() {
         <motion.div variants={itemVariants}><RecommendationForm /></motion.div>
         <motion.div variants={itemVariants}><FeatureCards /></motion.div>
         <motion.div variants={itemVariants}><PopularCrops /></motion.div>
-        <motion.div variants={itemVariants}><FarmingTips /></motion.div>
+        <motion.div variants={itemVariants}><FarmingTips limit={3} /></motion.div>
       </motion.main>
       <SiteFooter />
     </div>

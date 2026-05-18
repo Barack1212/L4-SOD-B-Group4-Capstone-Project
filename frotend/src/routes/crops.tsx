@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { CROPS } from "@/lib/farming-data";
-import { Droplets, Search, ArrowDownAZ, Leaf, Droplet } from "lucide-react";
+import { CROPS, detectSeason } from "@/lib/farming-data";
+import { Droplets, Search, ArrowDownAZ, Leaf, Droplet, BookmarkPlus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Select,
@@ -12,6 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/crops")({
   component: CropsPage,
@@ -27,8 +30,43 @@ export const Route = createFileRoute("/crops")({
 });
 
 function CropsPage() {
+  const { user } = useAuth();
+  const currentSeason = detectSeason();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "waterNeed">("name");
+
+  async function handleAddRecommendation(crop: typeof CROPS[0]) {
+    if (!user) {
+      toast.error("Please log in to save recommendations.");
+      return;
+    }
+
+    const token = window.localStorage.getItem("auth_token");
+    try {
+      const response = await fetch("/api/recommendations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          crop: crop.name,
+          district: user.district || "Rwanda",
+          season: currentSeason.key,
+          advice: crop.notes,
+        }),
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error || "Failed to save recommendation");
+      }
+      
+      toast.success(`${crop.name} added to your recommendations!`);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }
 
   const filteredAndSortedCrops = useMemo(() => {
     let result = CROPS.filter(
@@ -177,6 +215,17 @@ function CropsPage() {
                           </span>
                         ))}
                       </div>
+                    </div>
+                    
+                    <div className="mt-6 border-t border-border/50 pt-4">
+                      <Button
+                        variant="outline"
+                        className="w-full gap-2 border-primary/20 text-primary hover:bg-primary/10"
+                        onClick={() => handleAddRecommendation(c)}
+                      >
+                        <BookmarkPlus className="h-4 w-4" />
+                        Add Recommendation
+                      </Button>
                     </div>
                   </div>
                 </motion.article>

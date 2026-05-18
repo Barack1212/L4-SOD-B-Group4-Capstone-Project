@@ -11,7 +11,8 @@ const iconMap: Record<string, { icon: React.ReactNode, color: string, bg: string
   rain: { icon: <CloudRain className="h-6 w-6" />, color: "text-cyan-500", bg: "bg-cyan-500/10" },
 };
 
-export function FarmingTips() {
+export function FarmingTips({ limit }: { limit?: number }) {
+  const displayedTips = limit ? FARMING_TIPS.slice(0, limit) : FARMING_TIPS;
   return (
     <section className="container mx-auto mt-24 px-4">
       <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-12">
@@ -32,7 +33,7 @@ export function FarmingTips() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, staggerChildren: 0.1 }}
       >
-        {FARMING_TIPS.slice(0, 3).map((t) => {
+        {displayedTips.map((t) => {
           const styling = iconMap[t.icon] || iconMap.seeds;
           return (
             <motion.article
